@@ -1,0 +1,18 @@
+USE WAREHOUSE GEOPULSE_WH;
+USE DATABASE GEOPULSE_DB;
+USE SCHEMA RAW;
+
+-- 1. Create File Format tailored for gps_pings.csv and stores.csv
+CREATE OR REPLACE FILE FORMAT GPS_CSV_FORMAT
+    TYPE = 'CSV'
+    FIELD_DELIMITER = ','
+    SKIP_HEADER = 1
+    DATE_FORMAT = 'YYYY-MM-DD'
+    TIMESTAMP_FORMAT = 'YYYY-MM-DD HH24:MI:SS'
+    TIME_FORMAT = 'HH24:MI'
+    NULL_IF = ('NULL', 'null', '')
+    FIELD_OPTIONALLY_ENCLOSED_BY = '"';
+
+-- 2. Create Internal Stage to hold uploaded CSV files
+CREATE OR REPLACE STAGE GPS_RAW_STAGE
+    FILE_FORMAT = GPS_CSV_FORMAT;
